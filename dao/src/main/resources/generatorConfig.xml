@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!--指定特定数据库的jdbc驱动jar包的位置-->
+	<classPathEntry location="F:\lib\maven_download\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar"/>
+	<context id="context1">
+		<property name="javaFileEncoding" value="UTF-8" />
+		<commentGenerator>
+		  <property name="addRemarkComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection connectionURL="jdbc:mysql://localhost:3306/test"
+			driverClass="com.mysql.jdbc.Driver" password="root"
+			userId="root">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="true" />
+		</javaTypeResolver>
+		<!-- 常规 -->
+        <!-- 对应生成的pojo所在包 -->
+		<javaModelGenerator targetPackage="com.model.generate"
+			targetProject="../model/src/main/java">
+		</javaModelGenerator>
+        <!-- 对应生成的mapper所在目录 -->
+		<sqlMapGenerator targetPackage="mybatis.mapper"
+			targetProject="../dao/src/main/resources" />
+        <!-- 配置mapper对应的java映射 -->
+		<javaClientGenerator targetPackage="com.mapper" targetProject="../dao/src/main/java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="false" />
+			<property name="rootInterface" value="com.core.base.BaseMapper" />
+		</javaClientGenerator>
+
+		<table tableName="user">
+			<property name="useActualColumnNames" value="false" />
+		</table>
+	</context>
+</generatorConfiguration>
