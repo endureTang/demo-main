@@ -112,6 +112,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!--单元测试-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
     </dependencies>
     <modules>
         <module>api</module>
@@ -122,6 +127,7 @@
         <module>core</module>
         <module>eureka-server</module>
         <module>data-gateway</module>
+        <module>rabbitmq-task</module>
     </modules>
 
 </project>
