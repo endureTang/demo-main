@@ -12,10 +12,23 @@
     <artifactId>rabbitmq-task</artifactId>
 
     <dependencies>
+        <!--RabbitMq依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+
+        <!--Eureka Client依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!--Eureka Feign 依赖 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
         <!--引入model依赖-->
         <dependency>
             <groupId>com.endure.demo</groupId>

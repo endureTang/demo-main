@@ -2,7 +2,9 @@ package com.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.feign.MongodbService;
+import com.feign.MqOrderService;
 import com.model.exception.CommonException;
+import com.model.generate.User;
 import com.model.mogodb.UserMongoData;
 import com.model.responseDto.ResponseMsgDto;
 import com.service.UserService;
@@ -30,6 +32,9 @@ public class UserApi {
     @Resource
     private MongodbService mongodbService;
 
+    @Resource
+    private MqOrderService mqOrderService;
+
     /**
      * 获取数据
      * @return
@@ -38,6 +43,9 @@ public class UserApi {
     public String getAll(@RequestParam(required = false) Map<String,Object> condition){
         try {
             List projectList = userService.getAll(condition);
+            for (Object user :projectList) {
+                mqOrderService.sendOrderMq( (User)user);
+            }
             String s = JSONArray.toJSONString(projectList);
             return s;
         } catch (CommonException e) {
