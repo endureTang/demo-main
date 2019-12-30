@@ -38,6 +38,10 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * 给每个队列添加MQ消息监听
+     * @param queueConfig
+     */
     public void refeshSimpleMessageListenerContainer(QueueConfig queueConfig){
         logger.info("RabbitMq消息监听容器启动....");
         SimpleMessageListenerContainer container = containerMap.get(queueConfig.getName());
@@ -78,7 +82,9 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
         }
 
     }
-    // 在应用程序上下文加载完成后，开始初始化消息队列的监听机制
+    /**
+     *  在应用程序上下文加载完成后，开始初始化消息队列的监听机制
+      */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
