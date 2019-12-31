@@ -5,6 +5,7 @@ import com.mq.receiver.OrderHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
@@ -38,10 +39,13 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
         this.applicationContext = applicationContext;
     }
 
-    /**
-     * 给每个队列添加MQ消息监听
-     * @param queueConfig
-     */
+    /** 
+    * @Description: 初始化队列消息监听
+    * @Param:  QueueConfig queueConfig
+    * @return:
+    * @Author: endure
+    * @Date: 2019/12/31 
+    */
     public void refeshSimpleMessageListenerContainer(QueueConfig queueConfig){
         logger.info("RabbitMq消息监听容器启动....");
         SimpleMessageListenerContainer container = containerMap.get(queueConfig.getName());
@@ -50,8 +54,8 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
             container.stop();
         }
         container = new SimpleMessageListenerContainer(connectionFactory);
-        //设置监听队列
-        container.setQueues(rabbitConfig.orderQueue(),rabbitConfig.repayPlanQueue());
+        //设置监听队列，指定为持久化
+        container.setQueues(new Queue(queueConfig.getName(),true));
         //设置消息处理监听
         container.setMessageListener((ChannelAwareMessageListener)applicationContext.getBean(queueConfig.getHandler()));
         // 设置获取消息的并发线程数
@@ -61,12 +65,13 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
         //设置是否重回队列
         container.setDefaultRequeueRejected(false);
         //设置手动处理消息
-        container.setAcknowledgeMode(queueConfig.isAutoack() ? AcknowledgeMode.AUTO : AcknowledgeMode.MANUAL);
+        AcknowledgeMode acknowledgeMode = queueConfig.isAutoack() ? AcknowledgeMode.AUTO : AcknowledgeMode.MANUAL;
+        container.setAcknowledgeMode(acknowledgeMode);
         //设置监听外露
         container.setExposeListenerChannel(true);
         // 每个消费者，每次取消息条数
         container.setPrefetchCount(queueConfig.getPrefetchCount());
-        logger.info("刷新MQ消息监听-->"+queueConfig.getName());
+        logger.info("刷新MQ消息监听-->{},队列处理模式为-->{}",queueConfig.getName(),acknowledgeMode);
         containerMap.put(queueConfig.getName(), container);
         container.start();
 
@@ -74,7 +79,7 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
 
     @Override
     public void run() {
-        List<QueueConfig> queueConfigs = rabbitConfig.getQuene();
+        List<QueueConfig> queueConfigs = rabbitConfig.getQueue();
         for (QueueConfig queueConfig : queueConfigs) {
             if (queueConfig.isMonitor()){
                 this.refeshSimpleMessageListenerContainer(queueConfig);
@@ -82,9 +87,13 @@ public class QueueHanlder implements ApplicationContextAware,Runnable{
         }
 
     }
-    /**
-     *  在应用程序上下文加载完成后，开始初始化消息队列的监听机制
-      */
+    /** 
+    * @Description: 在应用程序上下文加载完成后，开始初始化消息队列的监听机制
+    * @Param:  
+    * @return:  
+    * @Author: endure
+    * @Date: 2019/12/31 
+    */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;

@@ -17,7 +17,5 @@ public class RepayPlanHandler implements ChannelAwareMessageListener {
 		channel.basicQos(1);
 		String msg = new String(message.getBody(), "utf-8");
 		logger.info("MqMsgHandler接收到消息："+ msg);
-		channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
-		logger.info("MqMsgHandler消息处理完毕");
 	}
 }

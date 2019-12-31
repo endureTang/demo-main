@@ -1,12 +1,11 @@
 package com.feign;
 
 import com.model.generate.User;
-import com.model.responseDto.ResponseMsgDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name="rabbitmq-task",configuration=FeignConfig.class)
+@FeignClient(name="rabbitmq-task",configuration=FeignConfig.class,fallback = MqOrderServiceFallback.class)
 public interface MqOrderService {
 
 	/**
@@ -15,7 +14,5 @@ public interface MqOrderService {
 	 * @return
 	 */
 	@PostMapping(value="/mqSendApi/sendOrderMq")
-	ResponseMsgDto sendOrderMq(@RequestBody User user);
-
-
+	String sendOrderMq(@RequestBody User user);
 }

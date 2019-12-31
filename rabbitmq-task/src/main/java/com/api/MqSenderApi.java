@@ -19,17 +19,23 @@ public class MqSenderApi {
     @Resource
     private MessageSenderHelper messageSenderHelper;
 
-    /**
-     * 订单消息发送
-     * @return
-     */
+    /** 
+    * @Description: 订单消息发送
+    * @Param:  
+    * @return:  
+    * @Author: endure
+    * @Date: 2019/12/31 
+    */
     @RequestMapping(value = "sendOrderMq")
-    public void sendOrderMq(@RequestBody User user){
+    public String sendOrderMq(@RequestBody User user){
         try {
-            messageSenderHelper.sendJsonMQ(QueueListIndex.ORDER_QUEUE, JSONObject.toJSONString(user));
+            String userStr = JSONObject.toJSONString(user);
+            logger.info("接收到消息"+userStr);
+            messageSenderHelper.sendJsonMQ(QueueListIndex.ORDER_QUEUE, userStr);
+            return  "消息发送成功";
         } catch (Exception e){
             logger.error("系统错误"+e);
+            return  "消息发送失败";
         }
     }
-
 }

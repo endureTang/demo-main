@@ -13,10 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/** 
+* @Description: 用户接口api
+* @Author: endure
+* @Date: 2019/12/31 
+*/
 @RestController
 @RequestMapping(value = "user")
 public class UserApi {
@@ -35,16 +41,21 @@ public class UserApi {
     @Resource
     private MqOrderService mqOrderService;
 
-    /**
-     * 获取数据
-     * @return
-     */
+    /** 
+    * @Description: 获取数据
+    * @Param:  
+    * @return:  
+    * @Author: endure
+    * @Date: 2019/12/31 
+    */
     @RequestMapping(value = "getAll")
+
     public String getAll(@RequestParam(required = false) Map<String,Object> condition){
         try {
             List projectList = userService.getAll(condition);
             for (Object user :projectList) {
-                mqOrderService.sendOrderMq( (User)user);
+                String mqServiceMsg = mqOrderService.sendOrderMq( (User)user);
+                logger.info("feign调用mq返回消息："+mqServiceMsg);
             }
             String s = JSONArray.toJSONString(projectList);
             return s;
@@ -56,10 +67,13 @@ public class UserApi {
         }
     }
 
-    /**
-     * 获取数据
-     * @return
-     */
+        /**
+        * @Description: 推送数据到MongoDB
+        * @Param:
+        * @return:
+        * @Author: zxb
+        * @Date: 2019/12/31
+        */
     @RequestMapping(value = "pushUser")
     public ResponseMsgDto pushUser(String jsonArrayStr){
         try {

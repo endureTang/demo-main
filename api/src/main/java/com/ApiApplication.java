@@ -13,7 +13,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * 
  * @Name com.ApiApplication
  * @Description
- * 
  * @Author trj
  * @Version 2019年12月10日上午10:31:49
  * @Copyright self
