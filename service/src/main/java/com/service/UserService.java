@@ -6,6 +6,7 @@ import com.model.exception.CommonException;
 import com.model.generate.UserExample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,11 +15,13 @@ import java.util.Map;
 
 @Service(value = "userService")
 public class UserService {
+    private final String USER_CACHE = "user_cache";
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
     @Resource
     private BaseDao baseDao;
 
-    public List getAll(Map condition) throws CommonException {
+
+    public List getAll(Map map) throws CommonException {
         try {
             UserExample example = new UserExample();
 //            example.createCriteria().andNameLike(condition.get("name")+"");
@@ -29,7 +32,7 @@ public class UserService {
            throw new CommonException("系统错误");
         }
     }
-
+    @Cacheable(value = USER_CACHE,key = "#name")
     public List getByname(String name) throws CommonException {
         try {
             UserExample example = new UserExample();

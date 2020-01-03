@@ -49,7 +49,6 @@ public class UserApi {
     * @Date: 2019/12/31 
     */
     @RequestMapping(value = "getAll")
-
     public String getAll(@RequestParam(required = false) Map<String,Object> condition){
         try {
             List projectList = userService.getAll(condition);
