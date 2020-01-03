@@ -28,6 +28,7 @@
         <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
         <mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
         <fastjson.version>1.2.62</fastjson.version>
+        <shiro.version>1.4.0</shiro.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -92,6 +93,13 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+
+            <!--Shiro依赖版本管理 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -99,9 +107,9 @@
     <dependencies>
         <!-- springboot-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
         <!-- FastJson 依赖 -->
         <dependency>
             <groupId>com.alibaba</groupId>

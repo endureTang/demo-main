@@ -29,4 +29,16 @@ public class UserService {
            throw new CommonException("系统错误");
         }
     }
+
+    public List getByname(String name) throws CommonException {
+        try {
+            UserExample example = new UserExample();
+            example.createCriteria().andNameEqualTo(name);
+            UserMapper userMapper = baseDao.getMapper(UserMapper.class);
+            return  userMapper.selectByExample(example);
+        } catch (Exception e) {
+            logger.error("系统错误，class:"+this.getClass().getName()+"，method:"+Thread.currentThread().getStackTrace()[2].getMethodName()+e);
+            throw new CommonException("系统错误");
+        }
+    }
 }
