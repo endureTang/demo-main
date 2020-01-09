@@ -7,11 +7,11 @@ import com.model.exception.CommonException;
 import com.model.generate.User;
 import com.model.mogodb.UserMongoData;
 import com.model.responseDto.ResponseMsgDto;
+import com.redis.RedisLock;
 import com.service.UserService;
 import com.utils.RandomofNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +43,9 @@ public class UserApi {
 
     @Resource
     private MqOrderServiceFeign mqOrderService;
+
+    @Resource
+    private RedisLock redisLock;
 
     /** 
     * @Description: 获取数据
@@ -99,21 +102,27 @@ public class UserApi {
      */
     @RequestMapping(value = "addUser")
     public ResponseMsgDto addUser(@RequestBody User user1) {
+        String redisKey = "addUser";
+        String token = null;
+        ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         try {
             User user = new User();
             user.setName(RandomofNames.generateName());
             user.setSex(1);
-            try {
+            token = redisLock.lock(redisKey, 10000, 11000);
+            if(token != null) {
                 userService.insertUser(user);
-            }catch (DuplicateKeyException e){
-                logger.info("主键插入重复");
-            }catch (Exception e){
-                logger.error(""+e);
+            } else {
+                responseMsgDto.setResultStatus(ResponseMsgDto.FAIL);
+                responseMsgDto.setMsg("返回队列继续排队");
             }
-            return new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         } catch (Exception e) {
             logger.error("系统错误{}", e);
-            return new ResponseMsgDto(ResponseMsgDto.FAIL);
+            responseMsgDto.setResultStatus(ResponseMsgDto.FAIL);
+            responseMsgDto.setMsg("系统异常");
+        }finally {
+            redisLock.unlock(redisKey, token);
+            return responseMsgDto;
         }
     }
 }
