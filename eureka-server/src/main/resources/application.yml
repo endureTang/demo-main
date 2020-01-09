@@ -1,0 +1,16 @@
+server:
+  port: 8761
+  undertow:
+    io-threads: 16 #设置undertowIO线程数，它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程,不要设置过大，如果过大，启动项目会报错：打开文件数过多
+    worker-threads: 200 #阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程,它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+    buffer-size: 1024 #以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理,每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+    direct-buffers: true #是否分配的直接内存(NIO直接分配的堆外内存)
+spring:
+  application:
+    name: eureka-server
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8762/eureka/
+    fetch-registry: true # 是否从其他Eureka注册中心同步服务列表（单节点无需配置启用）
+    register-with-eureka: true # 是否将自己作为服务注册到其他Eureka服务注册中心（单节点无需配置启用）
