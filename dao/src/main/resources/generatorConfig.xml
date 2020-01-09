@@ -26,10 +26,10 @@
         <!-- 配置mapper对应的java映射 -->
 		<javaClientGenerator targetPackage="com.mapper" targetProject="../dao/src/main/java" type="XMLMAPPER">
 			<property name="enableSubPackages" value="false" />
-			<property name="rootInterface" value="com.core.base.BaseMapper" />
+			<property name="rootInterface" value="com.base.BaseMapper" />
 		</javaClientGenerator>
 
-		<table tableName="user">
+		<table tableName="product">
 			<property name="useActualColumnNames" value="false" />
 		</table>
 	</context>

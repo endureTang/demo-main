@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @create: 2019-12-31 14:21
  **/
 @Component
-public class MqOrderServiceFallback implements MqOrderService{
+public class MqOrderServiceFallback implements MqOrderServiceFeign {
     @Override
     public String sendOrderMq(User user) {
         System.out.println("调用消息接口失败，对其进行降级处理！");

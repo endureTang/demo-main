@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping(value = "mqSendApi")
+    @RequestMapping(value = "mqSendApi")
 public class MqSenderApi {
     private static Logger logger = LoggerFactory.getLogger(MqSenderApi.class);
     @Resource
@@ -37,5 +37,11 @@ public class MqSenderApi {
             logger.error("系统错误"+e);
             return  "消息发送失败";
         }
+    }
+
+    @RequestMapping(value = "testZuul")
+    public String testZuul(){
+        logger.info("zuul访问成功");
+        return "访问成功";
     }
 }

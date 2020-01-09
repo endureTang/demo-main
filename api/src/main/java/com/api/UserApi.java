@@ -1,15 +1,18 @@
 package com.api;
 
 import com.alibaba.fastjson.JSONArray;
-import com.feign.MongodbService;
-import com.feign.MqOrderService;
+import com.feign.MongodbServiceFeign;
+import com.feign.MqOrderServiceFeign;
 import com.model.exception.CommonException;
 import com.model.generate.User;
 import com.model.mogodb.UserMongoData;
 import com.model.responseDto.ResponseMsgDto;
 import com.service.UserService;
+import com.utils.RandomofNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,10 +39,10 @@ public class UserApi {
      * 注入MongoDB 网关feign
      */
     @Resource
-    private MongodbService mongodbService;
+    private MongodbServiceFeign mongodbService;
 
     @Resource
-    private MqOrderService mqOrderService;
+    private MqOrderServiceFeign mqOrderService;
 
     /** 
     * @Description: 获取数据
@@ -54,7 +57,7 @@ public class UserApi {
             List projectList = userService.getAll(condition);
             for (Object user :projectList) {
                 String mqServiceMsg = mqOrderService.sendOrderMq( (User)user);
-                logger.info("feign调用mq返回消息："+mqServiceMsg);
+                logger.info("getAll feign调用mq返回消息："+mqServiceMsg);
             }
             String s = JSONArray.toJSONString(projectList);
             return s;
@@ -83,6 +86,33 @@ public class UserApi {
             return new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         } catch (Exception e) {
            logger.error("系统错误{}",e);
+            return new ResponseMsgDto(ResponseMsgDto.FAIL);
+        }
+    }
+
+    /**
+     * @Description: 新增用户
+     * @Param:
+     * @return:
+     * @Author: endure
+     * @Date: 2019/12/31
+     */
+    @RequestMapping(value = "addUser")
+    public ResponseMsgDto addUser(@RequestBody User user1) {
+        try {
+            User user = new User();
+            user.setName(RandomofNames.generateName());
+            user.setSex(1);
+            try {
+                userService.insertUser(user);
+            }catch (DuplicateKeyException e){
+                logger.info("主键插入重复");
+            }catch (Exception e){
+                logger.error(""+e);
+            }
+            return new ResponseMsgDto(ResponseMsgDto.SUCCESS);
+        } catch (Exception e) {
+            logger.error("系统错误{}", e);
             return new ResponseMsgDto(ResponseMsgDto.FAIL);
         }
     }

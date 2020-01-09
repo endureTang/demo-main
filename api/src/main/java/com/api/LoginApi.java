@@ -1,7 +1,7 @@
 package com.api;
 
-import com.feign.MongodbService;
-import com.feign.MqOrderService;
+import com.feign.MongodbServiceFeign;
+import com.feign.MqOrderServiceFeign;
 import com.model.exception.CommonException;
 import com.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -34,10 +34,10 @@ public class LoginApi {
      * 注入MongoDB 网关feign
      */
     @Resource
-    private MongodbService mongodbService;
+    private MongodbServiceFeign mongodbService;
 
     @Resource
-    private MqOrderService mqOrderService;
+    private MqOrderServiceFeign mqOrderService;
 
     /** 
     * @Description: 获取数据

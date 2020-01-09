@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name="rabbitmq-task",configuration=FeignConfig.class,fallback = MqOrderServiceFallback.class)
-public interface MqOrderService {
+public interface MqOrderServiceFeign {
 
 	/**
 	 * 订单消息推送
