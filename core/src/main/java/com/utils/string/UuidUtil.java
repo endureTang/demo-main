@@ -13,7 +13,7 @@
  * Apr 17, 2015    YangShengJun         Create the class
  */
 
-package com.utils;
+package com.utils.string;
 
 import java.util.UUID;
 

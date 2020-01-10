@@ -11,10 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ApiServiceFeign {
 
 	/**
-	 * 订单消息推送
+	 * 添加用户
 	 * @param user
 	 * @return
 	 */
 	@PostMapping(value="/user/addUser")
 	ResponseMsgDto addUser(@RequestBody User user);
+
+	/**
+	 * 秒杀商品
+	 * @param user
+	 * @return
+	 */
+	@PostMapping(value="/orderApi/spikeSkill")
+	ResponseMsgDto spikeSkill(@RequestBody User user);
 }

@@ -18,4 +18,11 @@ public class ApiServiceFallBack implements ApiServiceFeign {
         responseMsgDto.setMsg("服务暂时无法访问，请稍后重试");
         return responseMsgDto;
     }
+
+    @Override
+    public ResponseMsgDto spikeSkill(User user) {
+        ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.FAIL);
+        responseMsgDto.setMsg("服务暂时无法访问，请稍后重试");
+        return responseMsgDto;
+    }
 }

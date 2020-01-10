@@ -7,7 +7,7 @@ import com.model.exception.CommonException;
 import com.model.generate.Product;
 import com.model.generate.User;
 import com.model.generate.UserExample;
-import com.utils.UuidUtil;
+import com.utils.string.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -56,15 +56,13 @@ public class UserService {
     public void insertUser(User user) throws Exception {
         UserMapper userMapper = baseDao.getMapper(UserMapper.class);
         ProductMapper productMapper = baseDao.getMapper(ProductMapper.class);
-
         int count = userMapper.countByExample(null);
-
         user.setId(UuidUtil.get32UUID());
         user.setPassword(count+"");
         user.setCreatedate(new Date());
         userMapper.insertSelective(user);
         Product product = productMapper.selectByPrimaryKey("1");
-        logger.info("新增数:库存数：{}:{}",count,product.getInventory());
+        logger.info(Thread.currentThread().getName()+"新增数:库存数：{}:{}",count,1000-product.getInventory());
         if(product.getInventory() == 0){
             logger.info("卖完了！");
             return;

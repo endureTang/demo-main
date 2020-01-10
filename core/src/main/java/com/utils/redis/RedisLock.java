@@ -1,4 +1,4 @@
-package com.redis;
+package com.utils.redis;
 
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /** 
-* @Description:
+* @Description: redis加锁解锁工具类
 * @Param:  
 * @return:  
 * @Author: endure
@@ -38,6 +38,16 @@ public class RedisLock {
 
     public RedisLock(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
+    }
+    /** 
+    * @Description: 获取redisTemplate对象 
+    * @Param:
+    * @return:  
+    * @Author: endure
+    * @Date: 2020/1/10 
+    */
+    public StringRedisTemplate getRedisTemplate(){
+        return redisTemplate;
     }
 
     /**

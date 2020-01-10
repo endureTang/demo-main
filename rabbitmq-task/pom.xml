@@ -28,10 +28,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        <!-- data-gateway包依赖 -->
+        <!-- feign-service包依赖 -->
         <dependency>
             <groupId>com.endure.demo</groupId>
-            <artifactId>data-gateway</artifactId>
+            <artifactId>feign-service</artifactId>
         </dependency>
 
         <dependency>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Random;
 
 @RestController
     @RequestMapping(value = "mqSendApi")
@@ -29,6 +30,9 @@ public class MqSenderApi {
     @RequestMapping(value = "sendOrderMq")
     public String sendOrderMq(@RequestBody User user){
         try {
+            Random random = new Random();
+            Integer id = random.nextInt(10000); //模拟多个用户下单
+            user.setId(id.toString());
             String userStr = JSONObject.toJSONString(user);
             logger.info("接收到消息"+userStr);
             messageSenderHelper.sendJsonMQ(QueueListIndex.ORDER_QUEUE, userStr);

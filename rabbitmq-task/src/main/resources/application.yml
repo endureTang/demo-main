@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: rabbitmq-task #服务名称
+  profiles:
+    active: test #启动模式
+server:
+  port: 8084 #服务端口

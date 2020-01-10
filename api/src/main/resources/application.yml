@@ -1,0 +1,15 @@
+server:
+  port: 8011 #服务端口
+spring:
+  application:
+    name: api #服务名
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver #数据库驱动
+  cache:
+    ehcache:
+      config: classpath:ehcache/ehcache.xml #ehcache配置文件路径
+  profiles:
+    active: test #启动模式
+mybatis:
+  type-aliases-package: com.model.generate #mybatis实体类路径
+  mapper-locations: classpath*:mybatis/mapper/*.xml  #mybatis xml文件路径

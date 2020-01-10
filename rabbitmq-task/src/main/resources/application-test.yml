@@ -1,0 +1,62 @@
+spring:
+  #rabbitmq配置
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: simple #发送端消息确认回调类型
+    publisher-returns: true #发送端消息确认回调
+    listener:
+      direct:
+        acknowledge-mode: manual #消费端消息确认
+      simple:
+        acknowledge-mode: manual #消费端消息确认
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: true
+#feign配置优化
+feign:
+  hystrix:
+    enabled: true #开启熔断
+  compression:
+    request:
+      enabled: true #启用feign压缩
+      mime-types: text/xml,application/xml,application/json
+    response:
+      enabled: true
+  httpclient: #
+    enabled: true
+    max-connections: 1000 #连接池最大连接数
+    max-connections-per-route: 200 #设置路由的默认最大连接
+#hystrix配置优化
+hystrix:
+  threadpool:
+    default:
+      coreSize: 500 #核心线程池数量
+  command:
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 1000 #该属性用来设置在请求处理超时时间中，断路器熔断的最小请求数
+      fallback:
+        enabled: true #是否开启回退方法
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 100000 #请求处理的超时时间
+#ribbon配置优化
+rabbitmq-task:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule # 轮询规则
+    ConnectTimeout: 3000 #连接超时时间，单位为毫秒
+    ReadTimeout: 3000 #读取的超时时间，单位为毫秒
+#undertow容器配置
+server:
+  undertow:
+    io-threads: 16 #设置undertowIO线程数，它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程,不要设置过大，如果过大，启动项目会报错：打开文件数过多
+    worker-threads: 200 #阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程,它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+    buffer-size: 1024 #以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理,每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+    direct-buffers: true  #是否分配的直接内存(NIO直接分配的堆外内存)

@@ -18,10 +18,10 @@
             <artifactId>service</artifactId>
         </dependency>
 
-        <!-- data-gateway包依赖 -->
+        <!-- feign-service包依赖 -->
         <dependency>
             <groupId>com.endure.demo</groupId>
-            <artifactId>data-gateway</artifactId>
+            <artifactId>feign-service</artifactId>
         </dependency>
 
         <!--Eureka Client依赖-->
@@ -29,11 +29,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <!--Eureka Feign 依赖 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
+
         <!--shiro依赖-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -49,16 +45,10 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-
+        <!--引入redis依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-
     </dependencies>
 </project>

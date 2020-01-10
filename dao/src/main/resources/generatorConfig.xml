@@ -29,7 +29,7 @@
 			<property name="rootInterface" value="com.base.BaseMapper" />
 		</javaClientGenerator>
 
-		<table tableName="product">
+		<table tableName="orderInfo">
 			<property name="useActualColumnNames" value="false" />
 		</table>
 	</context>

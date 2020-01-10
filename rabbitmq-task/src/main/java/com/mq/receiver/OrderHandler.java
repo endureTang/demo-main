@@ -27,13 +27,13 @@ public class OrderHandler implements ChannelAwareMessageListener {
 			String msg = new String(message.getBody(), "utf-8");
 			logger.info("MqMsgHandler接收到消息："+ msg);
 			User user = JSONObject.parseObject(msg, User.class);
-			ResponseMsgDto responseMsgDto = apiServiceFeign.addUser(user);
+			ResponseMsgDto responseMsgDto = apiServiceFeign.spikeSkill(user);
 			if (responseMsgDto.getResultStatus()==ResponseMsgDto.SUCCESS) {
 				channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
 				logger.info("MqMsgHandler消息处理完毕");
 			} else {
 				channel.basicNack(message.getMessageProperties().getDeliveryTag(),false,true);//消息处理失败，重回队列
-				logger.info("MqMsgHandler消息处理失败，保存用户失败，错误信息:{}",responseMsgDto.getMsg());
+				logger.info("保存用户失败，错误信息:{}",responseMsgDto.getMsg());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

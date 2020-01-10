@@ -10,4 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>core</artifactId>
     <description>工具包</description>
+
+    <dependencies>
+        <!--引入redis依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    </dependencies>
 </project>

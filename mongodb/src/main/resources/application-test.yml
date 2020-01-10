@@ -1,0 +1,18 @@
+#mongodb配置信息
+spring:
+  data:
+    mongodb:
+      uri: mongodb://myAdmin:666666@127.0.0.1/admin
+#eureka配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: true #开启健康检查
+  instance:
+    lease-renewal-interval-in-seconds: 10 #服务心跳的调用间隔，秒
+    lease-expiration-duration-in-seconds:  30 #服务失效的时间，秒
+    prefer-ip-address: true # 实例以 IP 的形式注册
+    ip-address: 127.0.0.1
+    instance-id: ${eureka.instance.ip-address}:${spring.application.name}:${server.port}

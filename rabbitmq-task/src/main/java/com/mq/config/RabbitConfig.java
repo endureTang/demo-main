@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Component("rabbitConfig") 
 @Configuration
-@PropertySource(value = {"classpath:${spring.profiles.active}/rabbitmq.properties"},encoding="utf-8") 
+@PropertySource(value = {"classpath:${spring.profiles.active}/rabbitmq.properties"},encoding="utf-8")
 @ConfigurationProperties(prefix="rabbitmq")
 public class RabbitConfig {
 	private List<QueueConfig> queueConfigList;
