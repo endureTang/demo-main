@@ -1,0 +1,52 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+zuul:
+  host:
+    connect-timeout-millis: 30000 #请求连接的超时时间
+    socket-timeout-millis: 60000   #socket超时
+  routes:
+    task:  #路径id  随意写，如果不指定serviceId，默认此路径为服务名
+      path: /zuulTask/**   #映射路径
+      serviceId: rabbitmq-task #指定服务名
+    api:
+      path: /zuulApi/**
+      serviceId: api
+
+  retryable: true
+  rabbitmq-task:
+    ribbon:
+      NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #指定轮询规则
+      ConnectTimeout: 2500 # 连接超时时间(ms)
+      ReadTimeout: 2000 # 通信超时时间(ms)
+      OkToRetryOnAllOperations: true # 是否对所有操作重试
+      MaxAutoRetriesNextServer: 2 # 同一服务不同实例的重试次数
+      MaxAutoRetries: 1 # 同一实例的重试次数
+
+  api:
+    ribbon:
+      NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #指定轮询规则
+      ConnectTimeout: 2500 # 连接超时时间(ms)
+      ReadTimeout: 2000 # 通信超时时间(ms)
+      OkToRetryOnAllOperations: true # 是否对所有操作重试
+      MaxAutoRetriesNextServer: 2 # 同一服务不同实例的重试次数
+      MaxAutoRetries: 1 # 同一实例的重试次数
+  ribbon-isolation-strategy: THREAD #设置为线程隔离策略
+
+
+#hystrix配置优化
+hystrix:
+  threadpool:
+    default:
+      coreSize: 500 #核心线程池数量
+  command:
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 1000 #该属性用来设置在请求处理超时时间中，断路器熔断的最小请求数
+      fallback:
+        enabled: true #是否开启回退方法
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000 #请求处理的超时时间

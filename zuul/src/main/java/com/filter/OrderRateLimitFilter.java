@@ -1,7 +1,9 @@
 package com.filter;
 
+import com.config.RedisKeyConfig;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.utils.redis.RedisCacheUtils;
 import com.utils.redis.RedisLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 public class OrderRateLimitFilter extends ZuulFilter {
     @Resource
     private RedisLock redisLock; //注入redis加锁服务
+    @Resource
+    private RedisKeyConfig redisKeyConfig;
     private final static Logger logger = LoggerFactory.getLogger(OrderRateLimitFilter.class);
     @Override
     public String filterType() {
@@ -48,10 +52,10 @@ public class OrderRateLimitFilter extends ZuulFilter {
     @Override
     public Object run(){
         RequestContext ctx = RequestContext.getCurrentContext();
-        String value = redisLock.getRedisTemplate().opsForValue().get("product_1");
+        String value = RedisCacheUtils.getRedisValueByKey(redisLock,redisKeyConfig.getZuulRateLimitKey());
         try {
             logger.info( "参与抢购的人数：" + value);
-            if(Integer.parseInt(value)> 1000)                {
+            if(value != null && Integer.parseInt(value)> 1000)                {
                 String msg="参与抢购的人太多，请稍后再试一试";
                 errorHandle(ctx, msg);
                 return null;

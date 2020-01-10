@@ -48,7 +48,7 @@ hystrix:
           thread:
             timeoutInMilliseconds: 100000 #请求处理的超时时间
 #ribbon配置优化
-rabbitmq-task:
+api:
   ribbon:
     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule # 轮询规则
     ConnectTimeout: 3000 #连接超时时间，单位为毫秒

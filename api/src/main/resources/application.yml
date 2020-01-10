@@ -1,5 +1,5 @@
 server:
-  port: 8011 #服务端口
+  port: 8081 #服务端口
 spring:
   application:
     name: api #服务名

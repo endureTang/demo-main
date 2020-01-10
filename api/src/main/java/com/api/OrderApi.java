@@ -1,10 +1,12 @@
 package com.api;
 
+import com.cfg.RedisKeyConfig;
 import com.model.exception.CommonException;
 import com.model.generate.Orderinfo;
 import com.model.generate.User;
 import com.model.responseDto.ResponseMsgDto;
 import com.service.OrderService;
+import com.utils.redis.RedisCacheUtils;
 import com.utils.redis.RedisLock;
 import com.utils.string.UuidUtil;
 import org.slf4j.Logger;
@@ -31,6 +33,8 @@ public class OrderApi {
     @Resource
     private OrderService orderService;
     @Resource
+    private RedisKeyConfig redisKeyConfig;
+    @Resource
     private RedisLock redisLock; //注入redis加锁服务
     /** 
     * @Description: 秒杀商品
@@ -42,9 +46,8 @@ public class OrderApi {
     @RequestMapping(value = "spikeSkill")
     public ResponseMsgDto spikeSkill(@RequestBody User user){
         ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.SUCCESS);
-        String redisKey = "spikeSkill";//秒杀加锁key
-        String zuulRateLimitKey = "product_1";//zuul限流缓存key
-
+        String redisKey = redisKeyConfig.getRedisSpikeSkillKey(); //秒杀加锁key
+        String zuulRateLimitKey = redisKeyConfig.getZuulRateLimitKey(); //zuul限流缓存key
         String token = null; //加锁成功token
         try {
             Random random = new Random();
@@ -57,15 +60,10 @@ public class OrderApi {
             order.setStatus(0);
             order.setId(UuidUtil.get32UUID());
             //创建分布式锁
-            token = redisLock.lock(redisKey, 10000, 11000);
+            token = redisLock.lock(redisKey, Long.parseLong(redisKeyConfig.getLockExpireTime()), Long.parseLong(redisKeyConfig.getLockTimeout()));
             if(token != null) {
                 logger.info(Thread.currentThread().getName() + "获取了锁");
-                String value = redisLock.getRedisTemplate().opsForValue().get(zuulRateLimitKey);
-                if(StringUtils.isEmpty(value)){
-                    redisLock.getRedisTemplate().opsForValue().set(zuulRateLimitKey,"1",60*60, TimeUnit.SECONDS);
-                }else{
-                    redisLock.getRedisTemplate().boundValueOps(zuulRateLimitKey).increment(1);//zuul限流 +1
-                }
+                RedisCacheUtils.increment(redisLock,zuulRateLimitKey);//zuul限流 +1
                 orderService.spikeOrder(order);
             }else{
                 logger.info("获取锁超时");
@@ -81,7 +79,7 @@ public class OrderApi {
         }finally {
             redisLock.unlock(redisKey, token);
             logger.info(Thread.currentThread().getName() + "释放了锁");
-            redisLock.getRedisTemplate().boundValueOps(zuulRateLimitKey).increment(-1);//zuul限流 +1
+            RedisCacheUtils.deIncrement(redisLock,zuulRateLimitKey);//zuul限流 -1
         }
         return  responseMsgDto;
     }
