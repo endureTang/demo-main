@@ -7,18 +7,26 @@ import org.springframework.stereotype.Component;
 
 @Configuration
 @ConfigurationProperties(prefix = "redis",ignoreUnknownFields = false)
-@PropertySource("classpath:test/redisKeyConfig.properties")
+@PropertySource("classpath:test/zuulConfig.properties")
 @Component
-public class RedisKeyConfig {
+public class ZuulConfig {
+    //商品秒杀限流key
     private String zuulRateLimitKey;
+    //商品秒杀限流阈值
+    private String rateLimitAmount;
 
-    public String getZuulRateLimitKey() {
-        System.out.println("====================zuulRateLimitKey=================="+zuulRateLimitKey);
-        return zuulRateLimitKey;
+    public String getRateLimitAmount() {
+        return rateLimitAmount;
     }
 
+    public void setRateLimitAmount(String rateLimitAmount) {
+        this.rateLimitAmount = rateLimitAmount;
+    }
+
+    public String getZuulRateLimitKey() {
+        return zuulRateLimitKey;
+    }
     public void setZuulRateLimitKey(String zuulRateLimitKey) {
-        System.out.println("====================zuulRateLimitKey=================="+zuulRateLimitKey);
         this.zuulRateLimitKey = zuulRateLimitKey;
     }
 }

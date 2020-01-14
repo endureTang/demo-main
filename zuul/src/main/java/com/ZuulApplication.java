@@ -1,6 +1,6 @@
 package com;
 
-import com.config.RedisKeyConfig;
+import com.config.ZuulConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,7 +14,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
  **/
 
 @SpringBootApplication
-@EnableConfigurationProperties(RedisKeyConfig.class)
+@EnableConfigurationProperties(ZuulConfig.class)
 @EnableDiscoveryClient//eureka服务发现注册
 @EnableZuulProxy //开启zuul网关路由
 public class ZuulApplication {

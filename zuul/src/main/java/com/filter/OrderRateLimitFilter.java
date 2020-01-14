@@ -1,6 +1,6 @@
 package com.filter;
 
-import com.config.RedisKeyConfig;
+import com.config.ZuulConfig;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.utils.redis.RedisCacheUtils;
@@ -22,7 +22,7 @@ public class OrderRateLimitFilter extends ZuulFilter {
     @Resource
     private RedisLock redisLock; //注入redis加锁服务
     @Resource
-    private RedisKeyConfig redisKeyConfig;
+    private ZuulConfig zuulConfig;
     private final static Logger logger = LoggerFactory.getLogger(OrderRateLimitFilter.class);
     @Override
     public String filterType() {
@@ -52,10 +52,10 @@ public class OrderRateLimitFilter extends ZuulFilter {
     @Override
     public Object run(){
         RequestContext ctx = RequestContext.getCurrentContext();
-        String value = RedisCacheUtils.getRedisValueByKey(redisLock,redisKeyConfig.getZuulRateLimitKey());
+        String value = RedisCacheUtils.getAndInitRedisValueByKey(redisLock, zuulConfig.getZuulRateLimitKey(),10);
         try {
             logger.info( "参与抢购的人数：" + value);
-            if(value != null && Integer.parseInt(value)> 1000)                {
+            if(value != null && Integer.parseInt(value)> Integer.parseInt(zuulConfig.getRateLimitAmount()))                {
                 String msg="参与抢购的人太多，请稍后再试一试";
                 errorHandle(ctx, msg);
                 return null;

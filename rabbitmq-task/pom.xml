@@ -33,14 +33,16 @@
             <groupId>com.endure.demo</groupId>
             <artifactId>feign-service</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.endure.demo</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <!--properties文件读取-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
-
     </dependencies>
 
 </project>

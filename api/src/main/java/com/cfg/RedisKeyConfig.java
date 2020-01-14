@@ -12,6 +12,7 @@ public class RedisKeyConfig {
     private String zuulRateLimitKey;
     private String lockExpireTime;
     private String lockTimeout;
+    private String stockKey;
 
 
     public String getRedisSpikeSkillKey() {
@@ -44,5 +45,13 @@ public class RedisKeyConfig {
 
     public void setLockTimeout(String lockTimeout) {
         this.lockTimeout = lockTimeout;
+    }
+
+    public String getStockKey() {
+        return stockKey;
+    }
+
+    public void setStockKey(String stockKey) {
+        this.stockKey = stockKey;
     }
 }

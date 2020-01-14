@@ -6,12 +6,10 @@ import com.model.generate.Orderinfo;
 import com.model.generate.User;
 import com.model.responseDto.ResponseMsgDto;
 import com.service.OrderService;
-import com.utils.redis.RedisCacheUtils;
 import com.utils.redis.RedisLock;
 import com.utils.string.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @description: 订单接口类
@@ -47,26 +44,20 @@ public class OrderApi {
     public ResponseMsgDto spikeSkill(@RequestBody User user){
         ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         String redisKey = redisKeyConfig.getRedisSpikeSkillKey(); //秒杀加锁key
-        String zuulRateLimitKey = redisKeyConfig.getZuulRateLimitKey(); //zuul限流缓存key
+        String stockKey = redisKeyConfig.getStockKey(); //zuul限流缓存key
         String token = null; //加锁成功token
+        Long start = System.currentTimeMillis();
+        Long end;
         try {
-            Random random = new Random();
-            Integer id = random.nextInt(10000); //模拟多个用户下单
-            user.setId(id.toString());
-            Orderinfo order = new Orderinfo();
-            order.setUserid(user.getId());
-            order.setProductid("1");
-            order.setCreatedate(new Date());
-            order.setStatus(0);
-            order.setId(UuidUtil.get32UUID());
+            Orderinfo order = packageOrder(user);
             //创建分布式锁
             token = redisLock.lock(redisKey, Long.parseLong(redisKeyConfig.getLockExpireTime()), Long.parseLong(redisKeyConfig.getLockTimeout()));
             if(token != null) {
                 logger.info(Thread.currentThread().getName() + "获取了锁");
-                RedisCacheUtils.increment(redisLock,zuulRateLimitKey);//zuul限流 +1
-                orderService.spikeOrder(order);
+                orderService.spikeOrder(order,stockKey);
             }else{
                 logger.info("获取锁超时");
+                throw new CommonException("获取锁超市");
             }
         }catch (CommonException e){
             logger.error("业务异常{}", e.getMessage());
@@ -78,9 +69,29 @@ public class OrderApi {
             responseMsgDto.setMsg("系统异常");
         }finally {
             redisLock.unlock(redisKey, token);
-            logger.info(Thread.currentThread().getName() + "释放了锁");
-            RedisCacheUtils.deIncrement(redisLock,zuulRateLimitKey);//zuul限流 -1
+            end = System.currentTimeMillis();
+            logger.info(Thread.currentThread().getName() + "释放了锁，持有时间：{}ms",end -start);
         }
         return  responseMsgDto;
+    }
+
+    /** 
+    * @Description: 封装订单 
+    * @Param:  
+    * @return:  
+    * @Author: endure
+    * @Date: 2020/1/13 
+    */
+    private Orderinfo packageOrder(User user) {
+        Random random = new Random();
+        Integer id = random.nextInt(10000); //模拟多个用户下单
+        user.setId(id.toString());
+        Orderinfo order = new Orderinfo();
+        order.setUserid(user.getId());
+        order.setProductid("1");
+        order.setCreatedate(new Date());
+        order.setStatus(0);
+        order.setId(UuidUtil.get32UUID());
+        return order;
     }
 }

@@ -2,25 +2,48 @@ package com.utils.redis;
 
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 public class RedisCacheUtils {
     /**
      *  @author: endure
      *  @Date: 2020/1/10 20:39
-     *  @Description: 根据redis和key获取value
+     *  @Description: 根据redis和key获取value，如果为空，则初始化为0
      */ 
-    public static String getRedisValueByKey(RedisLock redisLock, String key){
+    public static String getAndInitRedisValueByKey(RedisLock redisLock, String key,Integer existSecond){
         if (redisLock == null || StringUtils.isEmpty(key)){
             return null;
         }
         String value = redisLock.getRedisTemplate().opsForValue().get(key);
         if(StringUtils.isEmpty(value)){
             value = "0";
-            redisLock.getRedisTemplate().opsForValue().set(key,"0",60*60, TimeUnit.SECONDS);
+            redisLock.getRedisTemplate().opsForValue().set(key,value,existSecond, TimeUnit.SECONDS);
         }
         return  value;
+    }
+    /**
+     *  @author: endure
+     *  @Date: 2020/1/10 20:39
+     *  @Description: 根据redis和key获取value
+     */
+    public static String getValueByKey(RedisLock redisLock, String key){
+        if (redisLock == null || StringUtils.isEmpty(key)){
+            return null;
+        }
+        String value = redisLock.getRedisTemplate().opsForValue().get(key);
+        return  value;
+    }
+    /**
+     *  @author: endure
+     *  @Date: 2020/1/10 20:39
+     *  @Description: 根据redis和key设置value
+     */
+    public static boolean setValueByKey(RedisLock redisLock, String key,String value){
+        if (redisLock == null || StringUtils.isEmpty(key)){
+            return false;
+        }
+        redisLock.getRedisTemplate().opsForValue().set(key,value,60*3, TimeUnit.SECONDS);
+        return true;
     }
 
     /**

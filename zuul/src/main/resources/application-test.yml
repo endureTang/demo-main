@@ -50,3 +50,9 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 20000 #请求处理的超时时间
+spring:
+  #redis相关配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456

@@ -105,17 +105,19 @@ public class RedisLock {
      * @return
      */
     public boolean unlock(String name, String token) {
-        byte[][] keysAndArgs = new byte[2][];
-        keysAndArgs[0] = name.getBytes(Charset.forName("UTF-8"));
-        keysAndArgs[1] = token.getBytes(Charset.forName("UTF-8"));
-        RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
-        RedisConnection conn = factory.getConnection();
-        try {
-            Long result = (Long)conn.scriptingCommands().eval(unlockScript.getBytes(Charset.forName("UTF-8")), ReturnType.INTEGER, 1, keysAndArgs);
-            if(result!=null && result>0)
-                return true;
-        }finally {
-            RedisConnectionUtils.releaseConnection(conn, factory,true);
+        if(token != null){
+            byte[][] keysAndArgs = new byte[2][];
+            keysAndArgs[0] = name.getBytes(Charset.forName("UTF-8"));
+            keysAndArgs[1] = token.getBytes(Charset.forName("UTF-8"));
+            RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
+            RedisConnection conn = factory.getConnection();
+            try {
+                Long result = (Long)conn.scriptingCommands().eval(unlockScript.getBytes(Charset.forName("UTF-8")), ReturnType.INTEGER, 1, keysAndArgs);
+                if(result!=null && result>0)
+                    return true;
+            }finally {
+                RedisConnectionUtils.releaseConnection(conn, factory,true);
+            }
         }
         return false;
     }
