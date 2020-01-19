@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/processdef" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1579164481521" name="" targetNamespace="http://www.activiti.org/processdef" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="SimpleProcess" isClosed="false" isExecutable="true" name="SimpleProcess" processType="None">
+    <startEvent id="startEvent1"/>
+    <userTask activiti:assignee="admin" activiti:exclusive="true" id="sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8" name="Admin Approver">
+      <extensionElements>
+        <modeler:activiti-idm-assignee xmlns:modeler="http://activiti.com/modeler"><![CDATA[true]]></modeler:activiti-idm-assignee>
+        <modeler:assignee-info-email xmlns:modeler="http://activiti.com/modeler"><![CDATA[admin]]></modeler:assignee-info-email>
+        <modeler:assignee-info-lastname xmlns:modeler="http://activiti.com/modeler"><![CDATA[Administrator]]></modeler:assignee-info-lastname>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+        <activiti:taskListener class="com.service.activitiService.ActivitiListener" event="create"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-F506EEC7-0411-4A97-930D-87500FF1414F" sourceRef="startEvent1" targetRef="sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8"/>
+    <endEvent id="sid-2C31753A-3AE2-4C91-B4F8-3B5EED2B4FC5"/>
+    <sequenceFlow id="sid-9FC989EE-BBC3-4EB2-A7AF-DA4F2649A68F" sourceRef="sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8" targetRef="sid-2C31753A-3AE2-4C91-B4F8-3B5EED2B4FC5"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="SimpleProcess">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="Shape-startEvent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="100.0" y="163.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8" id="Shape-sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8">
+        <omgdc:Bounds height="80.0" width="100.0" x="255.0" y="138.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="80.0" width="100.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-2C31753A-3AE2-4C91-B4F8-3B5EED2B4FC5" id="Shape-sid-2C31753A-3AE2-4C91-B4F8-3B5EED2B4FC5">
+        <omgdc:Bounds height="32.0" width="32.0" x="465.0" y="164.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-F506EEC7-0411-4A97-930D-87500FF1414F" id="BPMNEdge_sid-F506EEC7-0411-4A97-930D-87500FF1414F" sourceElement="startEvent1" targetElement="sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8">
+        <omgdi:waypoint x="132.0" y="179.0"/>
+        <omgdi:waypoint x="255.0" y="178.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-9FC989EE-BBC3-4EB2-A7AF-DA4F2649A68F" id="BPMNEdge_sid-9FC989EE-BBC3-4EB2-A7AF-DA4F2649A68F" sourceElement="sid-2B2AA039-82D2-479C-8FE9-6F48E4478BD8" targetElement="sid-2C31753A-3AE2-4C91-B4F8-3B5EED2B4FC5">
+        <omgdi:waypoint x="355.0" y="178.0"/>
+        <omgdi:waypoint x="465.0" y="180.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

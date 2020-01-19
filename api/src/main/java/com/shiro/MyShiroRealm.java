@@ -27,12 +27,12 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Resource
     private UserService userService;
-    /** 
+    /**
     * @Description: 授权
-    * @Param:  
-    * @return:  
+    * @Param:
+    * @return:
     * @Author: endure
-    * @Date: 2020/1/2 
+    * @Date: 2020/1/2
     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -47,12 +47,12 @@ public class MyShiroRealm extends AuthorizingRealm {
         return simpleAuthorizationInfo;
     }
 
-    /** 
-    * @Description: 登录认证 
-    * @Param:  
-    * @return:  
+    /**
+    * @Description: 登录认证
+    * @Param:
+    * @return:
     * @Author: endure
-    * @Date: 2020/1/2 
+    * @Date: 2020/1/2
     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {

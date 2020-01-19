@@ -21,7 +21,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Copyright self
  *
  */
-@SpringBootApplication
+@SpringBootApplication(exclude={org.activiti.spring.boot.SecurityAutoConfiguration.class})//开启activity工作流
 @MapperScan("com.mapper")
 @EnableConfigurationProperties(RedisKeyConfig.class)
 @EnableDiscoveryClient//eureka服务发现注册

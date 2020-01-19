@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Map;
 
-/** 
+/**
 * @Description: 用户接口api
 * @Author: endure
-* @Date: 2019/12/31 
+* @Date: 2019/12/31
 */
 @RestController
 public class LoginApi {
@@ -39,12 +39,12 @@ public class LoginApi {
     @Resource
     private MqOrderServiceFeign mqOrderService;
 
-    /** 
+    /**
     * @Description: 获取数据
-    * @Param:  
-    * @return:  
+    * @Param:
+    * @return:
     * @Author: endure
-    * @Date: 2019/12/31 
+    * @Date: 2019/12/31
     */
     @RequestMapping(value = "login")
     public String login(@RequestParam(required = false) Map<String,String> condition){
