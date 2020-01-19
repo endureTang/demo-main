@@ -1,7 +1,8 @@
-package com.api;
+package com.api.business;
 
 import com.alibaba.fastjson.JSONArray;
 import com.model.responseDto.ResponseMsgDto;
+import io.swagger.annotations.*;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -9,6 +10,7 @@ import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,7 @@ import java.util.Map;
 * @Date: 2019/12/31 
 */
 @RestController
+@Api(tags = "activiti测试类")
 @RequestMapping(value = "activiti")
 public class ActivitiApi {
     private static Logger logger = LoggerFactory.getLogger(ActivitiApi.class);
@@ -40,9 +43,13 @@ public class ActivitiApi {
     * @Author: endure
     * @Date: 2020/1/17 
     */
-    @RequestMapping(value = "init")
-    public String initActivitiEngine(){
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey("testProcess");
+    @GetMapping(value = "init")
+    @ApiOperation(value = "启动流程",notes = "根据传入流程名称")
+    @ApiImplicitParam(name = "processName",value = "流程名称",required = true,paramType = "form",dataType = "String")
+    @ApiResponse(code = 400,message = "流程名称不能为空")
+    public String initActivitiEngine(@RequestParam(value = "processName") String processName){
+//        ProcessInstance instance = runtimeService.startProcessInstanceByKey("testProcess");
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(processName);
         logger.info("testProcess流程已经启动，实例id为:{}",instance.getId());
         return "testProcess流程已经启动，实例id为："+instance.getId();
     }
@@ -53,7 +60,9 @@ public class ActivitiApi {
      * @Author: endure
      * @Date: 2020/1/17
      */
-    @RequestMapping(value = "getTaskList")
+    @GetMapping(value = "getTaskList")
+    @ApiOperation(value = "获取用户任务列表")
+    @ApiImplicitParam(name = "name",value = "用户名",required = true,paramType = "form",dataType = "String")
     public String getTaskList(@RequestParam(value = "name") String name){
         List<Task> list = taskService.createTaskQuery().taskAssignee(name).list();
         Map<String,Object> retMap = new HashMap<>();
@@ -72,7 +81,12 @@ public class ActivitiApi {
      * @Author: endure
      * @Date: 2019/12/31
      */
-    @RequestMapping(value = "checkMoney")
+    @GetMapping(value = "checkMoney")
+    @ApiOperation(value = "获取用户任务列表")
+    @ApiImplicitParams ({
+            @ApiImplicitParam(name = "money",value = "金额",required = true,paramType = "form",dataType = "String"),
+            @ApiImplicitParam(name = "taskId",value = "流程id",required = true,paramType = "form",dataType = "String")
+    })
     public ResponseMsgDto addUser(@RequestParam(value = "money",required = false) String money,@RequestParam(value = "taskId") String taskId) {
         ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         try {

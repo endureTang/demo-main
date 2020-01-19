@@ -1,4 +1,4 @@
-package com.api;
+package com.api.common;
 
 import com.feign.MongodbServiceFeign;
 import com.feign.MqOrderServiceFeign;
@@ -10,7 +10,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,7 +46,7 @@ public class LoginApi {
     * @Author: endure
     * @Date: 2019/12/31
     */
-    @RequestMapping(value = "login")
+    @PostMapping(value = "login")
     public String login(@RequestParam(required = false) Map<String,String> condition){
         try {
             String name = condition.get("name");
@@ -95,7 +95,7 @@ public class LoginApi {
      * @Author: endure
      * @Date: 2019/12/31
      */
-    @RequestMapping
+    @PostMapping
     public String index(){
         logger.info("index方法");
         return "首页页面";

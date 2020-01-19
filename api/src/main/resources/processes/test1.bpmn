@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/testm1579228528810" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1579228528810" name="" targetNamespace="http://www.activiti.org/testm1579228528810" typeLanguage="http://www.w3.org/2001/XMLSchema">
-  <process id="testProcess" isClosed="false" isExecutable="true" name="testProcess" processType="None">
+  <process id="testProcess1" isClosed="false" isExecutable="true" name="testProcess" processType="None">
     <startEvent id="_2" name="开始"/>
     <endEvent id="_3" name="结束"/>
     <userTask activiti:exclusive="true" id="_4" name="分流任务">

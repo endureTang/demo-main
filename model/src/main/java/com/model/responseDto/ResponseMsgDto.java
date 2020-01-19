@@ -9,7 +9,7 @@ import java.util.Map;
  * @author TangRenjian
  *
  */
-public class ResponseMsgDto {
+public class ResponseMsgDto<T> {
 	public static final Integer FAIL = -1;
 	public static final Integer SUCCESS = 0;
 	
@@ -38,7 +38,7 @@ public class ResponseMsgDto {
 	/**
 	 * 返回列表数据
 	 */
-	private Map<String, Object> data;
+	private Map<String, T> data;
 	/**
 	 * 返回列表总数
 	 */
@@ -77,11 +77,11 @@ public class ResponseMsgDto {
 		this.errorCode = errorCode;
 	}
 
-	public Map<String, Object> getData() {
+	public Map<String, T> getData() {
 		return data;
 	}
 
-	public void setData(Map<String, Object> data) {
+	public void setData(Map<String, T> data) {
 		this.data = data;
 	}
 

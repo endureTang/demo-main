@@ -1,4 +1,4 @@
-package com.api;
+package com.api.business;
 
 import com.cfg.RedisKeyConfig;
 import com.model.exception.CommonException;
@@ -8,8 +8,12 @@ import com.model.responseDto.ResponseMsgDto;
 import com.service.OrderService;
 import com.utils.redis.RedisLock;
 import com.utils.string.UuidUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +29,7 @@ import java.util.Random;
  **/
 @RestController
 @RequestMapping(value = "orderApi")
+@Api(tags = "订单接口类")
 public class OrderApi {
     private static Logger logger = LoggerFactory.getLogger(OrderApi.class);
     @Resource
@@ -40,7 +45,9 @@ public class OrderApi {
     * @Author: endure
     * @Date: 2020/1/10 
     */
-    @RequestMapping(value = "spikeSkill")
+    @PostMapping(value = "spikeSkill")
+    @ApiOperation(value = "订单秒杀接口")
+    @ApiModelProperty(value = "user")
     public ResponseMsgDto spikeSkill(@RequestBody User user){
         ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         String redisKey = redisKeyConfig.getRedisSpikeSkillKey(); //秒杀加锁key

@@ -1,10 +1,11 @@
-package com.api;
+package com.api.test;
 
 import com.alibaba.fastjson.JSONArray;
 import com.model.generate.User;
 import com.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ public class TestCache {
      * @Author: endure
      * @Date: 2019/12/31
      */
-    @RequestMapping(value = "testCache")
+    @PostMapping(value = "testCache")
     public String testCache(){
         List<User> user = userService.getByname("张三");
         logger.info("查询消息"+JSONArray.toJSONString(user)+"222");

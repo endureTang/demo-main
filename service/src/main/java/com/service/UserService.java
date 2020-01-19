@@ -1,10 +1,8 @@
 package com.service;
 
 import com.base.BaseDao;
-import com.mapper.ProductMapper;
 import com.mapper.UserMapper;
 import com.model.exception.CommonException;
-import com.model.generate.Product;
 import com.model.generate.User;
 import com.model.generate.UserExample;
 import com.utils.string.UuidUtil;
@@ -17,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service(value = "userService")
 @Transactional(readOnly = true)
@@ -28,15 +25,17 @@ public class UserService {
     private BaseDao baseDao;
 
 
-    public List getAll(Map map) throws CommonException {
+    public List getAll(User user) throws CommonException {
         try {
             UserExample example = new UserExample();
-//            example.createCriteria().andNameLike(condition.get("name")+"");
+            if(user.getName() != null){
+                example.createCriteria().andNameLike(user.getName());
+            }
             UserMapper userMapper = baseDao.getMapper(UserMapper.class);
             return  userMapper.selectByExample(example);
         } catch (Exception e) {
             logger.error("系统错误，class:"+this.getClass().getName()+"，method:"+Thread.currentThread().getStackTrace()[2].getMethodName()+e);
-           throw new CommonException("系统错误");
+            throw new CommonException("系统错误");
         }
     }
     @Cacheable(value = USER_CACHE,key = "#name")
@@ -52,22 +51,13 @@ public class UserService {
         }
     }
 
-    @Transactional(readOnly = false,rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void insertUser(User user) throws Exception {
         UserMapper userMapper = baseDao.getMapper(UserMapper.class);
-        ProductMapper productMapper = baseDao.getMapper(ProductMapper.class);
         int count = userMapper.countByExample(null);
         user.setId(UuidUtil.get32UUID());
         user.setPassword(count+"");
         user.setCreatedate(new Date());
         userMapper.insertSelective(user);
-        Product product = productMapper.selectByPrimaryKey("1");
-        logger.info(Thread.currentThread().getName()+"新增数:库存数：{}:{}",count,1000-product.getInventory());
-        if(product.getInventory() == 0){
-            logger.info("卖完了！");
-            return;
-        }
-        product.setInventory(product.getInventory()-1);
-        productMapper.updateByPrimaryKey(product);
     }
 }
