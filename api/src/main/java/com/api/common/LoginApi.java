@@ -18,10 +18,10 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
-* @Description: 用户接口api
-* @Author: endure
-* @Date: 2019/12/31
-*/
+ * @Description: 用户接口api
+ * @Author: endure
+ * @Date: 2019/12/31
+ */
 @RestController
 public class LoginApi {
     private static Logger logger = LoggerFactory.getLogger(LoginApi.class);
@@ -40,14 +40,14 @@ public class LoginApi {
     private MqOrderServiceFeign mqOrderService;
 
     /**
-    * @Description: 获取数据
-    * @Param:
-    * @return:
-    * @Author: endure
-    * @Date: 2019/12/31
-    */
+     * @Description: 获取数据
+     * @Param:
+     * @return:
+     * @Author: endure
+     * @Date: 2019/12/31
+     */
     @PostMapping(value = "login")
-    public String login(@RequestParam(required = false) Map<String,String> condition){
+    public String login(@RequestParam(required = false) Map<String, String> condition) {
         try {
             String name = condition.get("name");
             String password = condition.get("password");
@@ -56,23 +56,23 @@ public class LoginApi {
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
             return "login success";
-        } catch ( UnknownAccountException e ) {
-            logger.error("登录出现错误：{}","用户未注册"+e.getMessage());
+        } catch (UnknownAccountException e) {
+            logger.error("登录出现错误：{}", "用户未注册" + e.getMessage());
             return "用户未注册";
-        } catch ( IncorrectCredentialsException e ) {
-            logger.error("登录出现错误：{}","密码错误"+e.getMessage());
+        } catch (IncorrectCredentialsException e) {
+            logger.error("登录出现错误：{}", "密码错误" + e.getMessage());
             return "密码错误";
-        } catch ( LockedAccountException e ) {
-            logger.error("登录出现错误：{}","该账户不可用"+e.getMessage());
+        } catch (LockedAccountException e) {
+            logger.error("登录出现错误：{}", "该账户不可用" + e.getMessage());
             return "账户不可用";
-        } catch ( ExcessiveAttemptsException e ) {
-            logger.error("登录出现错误：{}","尝试次数超限"+e.getMessage());
+        } catch (ExcessiveAttemptsException e) {
+            logger.error("登录出现错误：{}", "尝试次数超限" + e.getMessage());
             return "超过尝试次数";
-        } catch(ExpiredCredentialsException e) {
-            logger.error("登录出现错误：{}","验证码过期"+e.getMessage());
+        } catch (ExpiredCredentialsException e) {
+            logger.error("登录出现错误：{}", "验证码过期" + e.getMessage());
             return "验证码过期";
         } catch (DisabledAccountException e) {
-            logger.error("登录出现错误：{}",e.getMessage());
+            logger.error("登录出现错误：{}", e.getMessage());
             return "登录出现错误";
         } catch (AuthenticationException e) {
             e.printStackTrace();
@@ -82,8 +82,8 @@ public class LoginApi {
             return "没有权限";
         } catch (CommonException e) {
             return e.getMessage();
-        }catch (Exception e){
-            logger.error("系统错误"+e);
+        } catch (Exception e) {
+            logger.error("系统错误" + e);
             return null;
         }
     }
@@ -96,7 +96,7 @@ public class LoginApi {
      * @Date: 2019/12/31
      */
     @PostMapping
-    public String index(){
+    public String index() {
         logger.info("index方法");
         return "首页页面";
     }

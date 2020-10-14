@@ -25,7 +25,7 @@ public class ZuulConfig {
 
     public String getZuulRateLimitKey() {
         return zuulRateLimitKey;
-    }
+}
     public void setZuulRateLimitKey(String zuulRateLimitKey) {
         this.zuulRateLimitKey = zuulRateLimitKey;
     }

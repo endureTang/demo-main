@@ -38,17 +38,18 @@ public class OrderApi {
     private RedisKeyConfig redisKeyConfig;
     @Resource
     private RedisLock redisLock; //注入redis加锁服务
-    /** 
-    * @Description: 秒杀商品
-    * @Param:
-    * @return:
-    * @Author: endure
-    * @Date: 2020/1/10 
-    */
+
+    /**
+     * @Description: 秒杀商品
+     * @Param:
+     * @return:
+     * @Author: endure
+     * @Date: 2020/1/10
+     */
     @PostMapping(value = "spikeSkill")
     @ApiOperation(value = "订单秒杀接口")
     @ApiModelProperty(value = "user")
-    public ResponseMsgDto spikeSkill(@RequestBody User user){
+    public ResponseMsgDto spikeSkill(@RequestBody User user) {
         ResponseMsgDto responseMsgDto = new ResponseMsgDto(ResponseMsgDto.SUCCESS);
         String redisKey = redisKeyConfig.getRedisSpikeSkillKey(); //秒杀加锁key
         String stockKey = redisKeyConfig.getStockKey(); //zuul限流缓存key
@@ -59,36 +60,36 @@ public class OrderApi {
             Orderinfo order = packageOrder(user);
             //创建分布式锁
             token = redisLock.lock(redisKey, Long.parseLong(redisKeyConfig.getLockExpireTime()), Long.parseLong(redisKeyConfig.getLockTimeout()));
-            if(token != null) {
+            if (token != null) {
                 logger.info(Thread.currentThread().getName() + "获取了锁");
-                orderService.spikeOrder(order,stockKey);
-            }else{
+                orderService.spikeOrder(order, stockKey);
+            } else {
                 logger.info("获取锁超时");
                 throw new CommonException("获取锁超市");
             }
-        }catch (CommonException e){
+        } catch (CommonException e) {
             logger.error("业务异常{}", e.getMessage());
             responseMsgDto.setResultStatus(ResponseMsgDto.SUCCESS);
             responseMsgDto.setMsg(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("系统错误{}", e);
             responseMsgDto.setResultStatus(ResponseMsgDto.FAIL);
             responseMsgDto.setMsg("系统异常");
-        }finally {
+        } finally {
             redisLock.unlock(redisKey, token);
             end = System.currentTimeMillis();
-            logger.info(Thread.currentThread().getName() + "释放了锁，持有时间：{}ms",end -start);
+            logger.info(Thread.currentThread().getName() + "释放了锁，持有时间：{}ms", end - start);
         }
-        return  responseMsgDto;
+        return responseMsgDto;
     }
 
-    /** 
-    * @Description: 封装订单 
-    * @Param:  
-    * @return:  
-    * @Author: endure
-    * @Date: 2020/1/13 
-    */
+    /**
+     * @Description: 封装订单
+     * @Param:
+     * @return:
+     * @Author: endure
+     * @Date: 2020/1/13
+     */
     private Orderinfo packageOrder(User user) {
         Random random = new Random();
         Integer id = random.nextInt(10000); //模拟多个用户下单
